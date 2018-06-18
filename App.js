@@ -1,3 +1,4 @@
+// import Expo from "expo";
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from "react-navigation";
@@ -11,31 +12,35 @@ import MapScreen from "./screens/MapScreen";
 import ReviewScreen from "./screens/ReviewScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
-class App extends React.Component {
+export default class App extends React.Component {
   render() {
+    const MainNavigator = createBottomTabNavigator({
+      Welcome: WelcomeScreen,
+      auth: AuthScreen,
+      main: createBottomTabNavigator({
+        map: MapScreen,
+        deck: DeckScreen,
+        review: createStackNavigator({
+          review: ReviewScreen,
+          settings: SettingsScreen
+        })
+      })
+      
+    }, {
+      navigationOptions: {
+        tabBarVisible: false
+      },
+      lazy: true
+    });
 
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <MainNavigation />
-        </View>
+          <MainNavigator />
       </Provider>
     );
   }
 }
-export default  MainNavigation = createBottomTabNavigator({
-  Welcome: WelcomeScreen,
-  auth: AuthScreen,
-  main: createBottomTabNavigator({
-    map: MapScreen,
-    deck: DeckScreen,
-    review: createStackNavigator({
-      review: ReviewScreen,
-      settings: SettingsScreen
-    })
-  })
-  
-});
+
 
 const styles = StyleSheet.create({
   container: {
